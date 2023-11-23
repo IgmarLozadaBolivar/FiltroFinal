@@ -98,7 +98,7 @@ Accedemos al contexto de la entidad de Pedido, en la cual se le pasa como condic
 **CODIGO DE CONSULTA + LINQ**:
 
 ```sql
-    public async Task<IEnumerable<object>> Query16()
+    public async Task<IEnumerable<object>> ClientesQueNoHayanHechoPagos()
     {
         var mensaje = "Listado de clientes que no hicieron pagos y se retorna, el nombre del cliente, el nombre y ciudad de la oficina del representante".ToUpper();
 
