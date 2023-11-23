@@ -359,7 +359,8 @@ Accedemos al contexto de las entidades de `Cliente`, Se realiza una seleccion, u
 ```
 
 **EXPLICACION**:
-Accedemos al contexto de las entidades de `Empleado`, `Oficina`,  y `Cliente`, se retorna un objeto de varios datos de distintas entidades.
+Accedemos al contexto de las entidades de `Empleado`, `Oficina`,  y `Cliente`, 
+se retorna un objeto de varios datos de distintas entidades.
 
 **METODO**: `GET`
 
