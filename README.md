@@ -54,19 +54,14 @@
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"><br>
 
 ## Consultas 👨‍💻 <br>
-**Method**: `GET`
+**METODO**: `GET`
 
-**🔰 Query 1: Devuelve un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos que `no han sido entregados a tiempo` ✅**: `http://localhost:5124/api/Pedido/PedidosQueNoFueronEntregadosATiempo`
+**🔰 ENUNCIADO 1: Devuelve un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos que `no han sido entregados a tiempo` ✅**
+
+**ENDPOINT**: `http://localhost:5124/api/Pedido/PedidosQueNoFueronEntregadosATiempo`
+
+**CODIGO DE CONSULTA + LINQ**:
 ```sql
-    CONSULTA en MySQL
-    SELECT `p`.`codigo_pedido` 
-    AS `CodigoDePedido`, `p`.`codigo_cliente` 
-    AS `CodigoDeCliente`, `p`.`fecha_esperada` 
-    AS `FechaEsperada`, `p`.`fecha_entrega` 
-    AS `FechaEntrega` FROM `pedido` AS `p`
-    WHERE `p`.`fecha_esperada` < `p`.`fecha_entrega`;
-
-    LOGICA DE CONSULTA + LINQ
     public async Task<IEnumerable<object>> PedidosQueNoFueronEntregadosATiempo()
     {
         var mensaje = "Pedidos que no fueron entregados a tiempo".ToUpper();
@@ -91,22 +86,18 @@
         return resultadoFinal;
     }
 ```
-**Method**: `GET`
+**EXPLICACION**:
+Accedemos al contexto de la entidad de Pedido, en la cual se le pasa como condicion que la fecha de entrega sea mayor a la fecha esperada, de un pedido ya realizado, con el objetivo de retornar un objeto que contiene los pedidos cuyos que no han sido entregados a tiempo y un pequeño mensaje.
 
-**🔰Query 2: Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante ✅**: `http://localhost:5124/api/Cliente/ClientesQueNoHayanHechoPagos`
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 2: Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante ✅** 
+
+**ENDPOINT**: `http://localhost:5124/api/Cliente/ClientesQueNoHayanHechoPagos`
+
+**CODIGO DE CONSULTA + LINQ**:
+
 ```sql
-    CONSULTA en MySQL
-    SELECT `c`.`nombre_cliente`, `e`.`nombre`, `e`.`apellido1`, `e`.`apellido2`, `o`.`ciudad`
-    FROM `cliente` AS `c` INNER JOIN `empleado` 
-    AS `e` ON `c`.`codigo_empleado_rep_ventas` = `e`.`codigo_empleado`
-    INNER JOIN `oficina` AS `o` ON `e`.`codigo_oficina` = `o`.`codigo_oficina`
-    LEFT JOIN LATERAL ( SELECT `p`.`codigo_cliente`, `p`.`id_transaccion`
-        FROM `pago` AS `p`
-        WHERE `c`.`codigo_cliente` = `p`.`codigo_cliente`
-    ) AS `t` ON TRUE
-    WHERE `t`.`codigo_cliente` IS NULL OR (`t`.`id_transaccion` IS NULL);
-
-    LOGICA DE CONSULTA + LINQ
     public async Task<IEnumerable<object>> Query16()
     {
         var mensaje = "Listado de clientes que no hicieron pagos y se retorna, el nombre del cliente, el nombre y ciudad de la oficina del representante".ToUpper();
@@ -136,30 +127,20 @@
         return resultadoFinal;
     }
 ```
-**Method**: `GET`
+**EXPLICACION**:
+Accedemos al contexto de la entidad de Cliente, en la cual se le pasa como condicion que en un cliente que no haya realizado pago alguno, con el objetivo de retornar un objeto que contiene el nombre del cliente, nombre, apellidos y ciudad de la oficina de dicho representante.
 
-**🔰 Query 3: Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales ✅**: `http://localhost:5124/api/Oficina/OficinasDondeNoTrabajanNingunEmpleadoEnGamaFrutal`
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 3: Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales ✅**
+
+**ENDPOINT**: `http://localhost:5124/api/Oficina/OficinasDondeNoTrabajanNingunEmpleadoEnGamaFrutal`
+
+**CODIGO DE CONSULTA + LINQ**:
 ```sql
-    SELECT `o`.`codigo_oficina`, `o`.`ciudad`, `o`.`region`, `o`.`pais`, `o`.`codigo_postal`, `o`.`telefono`, `o`.`linea_direccion1`, `o`.`linea_direccion2`       
-      FROM `oficina` AS `o`
-      LEFT JOIN `empleado` AS `e` ON `o`.`codigo_oficina` = `e`.`codigo_oficina`
-      WHERE `e`.`codigo_empleado` IS NULL OR NOT (EXISTS (
-          SELECT 1
-          FROM `cliente` AS `c`
-          WHERE (`c`.`codigo_empleado_rep_ventas` = `e`.`codigo_empleado`) AND EXISTS (
-              SELECT 1
-              FROM `pedido` AS `p`
-              WHERE (`p`.`codigo_cliente` = `c`.`codigo_cliente`) AND EXISTS (
-                  SELECT 1
-                  FROM `detalle_pedido` AS `d`
-                  WHERE (`d`.`codigo_pedido` = `p`.`codigo_pedido`) AND EXISTS (
-                      SELECT 1
-                      FROM `producto` AS `p0`
-                      WHERE (`d`.`codigo_producto` = `p0`.`codigo_producto`) AND (`p0`.`gama` = 'Frutales'))))));
-
     public async Task<IEnumerable<object>> OficinasDondeNoTrabajaNingunEmpleadoEnGamaFrutal()
     {
-        var mensaje = "Oficinas donde No trabaja ningun empleado en la gama frutal".ToUpper();
+        var mensaje = "Oficinas donde no trabaja ningun empleado en la gama frutal".ToUpper();
 
         var consulta = await _context.Oficinas
             .GroupJoin(
@@ -206,17 +187,17 @@
         return resultadoFinal;
     }
 ```
-**Method**: `GET`
+**EXPLICACION**:
+Accedemos al contexto de las entidades de `Oficina` y `Empleados`, en la cual al condicicion es que se verifique si una oficina no cuenta con un empleado, se realiza una agrupacion de datos, y condiciones como la gama perteneciente, la validacion de clientes anexados, y retornando datos de la oficina que no cuenta con un empleado en la gama frutal.
 
-**🔰 Query 4: Devuelve un listado de los 20 productos más vendidos y el número total de unidades que se han vendido de cada uno. El listado deberá estar ordenado por el número total de unidades vendidas ✅**: `http://localhost:5124/api/DetallePedido/20ProductosMasVendidos`
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 4: Devuelve un listado de los 20 productos más vendidos y el número total de unidades que se han vendido de cada uno. El listado deberá estar ordenado por el número total de unidades vendidas ✅** 
+
+**ENDPOINT**: `http://localhost:5124/api/DetallePedido/20ProductosMasVendidos`
+
+**CODIGO DE CONSULTA + LINQ**:
 ```sql
-    SELECT `d`.`codigo_producto` AS `CodigoDeProducto`, 
-    COALESCE(SUM(`d`.`cantidad`), 0) AS `TotalUnidadesVendidas`
-    FROM `detalle_pedido` AS `d`
-    GROUP BY `d`.`codigo_producto`
-    ORDER BY COALESCE(SUM(`d`.`cantidad`), 0) DESC
-    LIMIT @__p_0;
-
     public async Task<IEnumerable<object>> VeinteProductosMasVendidos()
     {
         var mensaje = "20 productos mas vendidos y el numero total de ventas de cada uno".ToUpper();
@@ -240,13 +221,17 @@
         return resultadoFinal;
     }
 ```
-**Method**: `GET`
+**EXPLICACION**:
+Accedemos al contexto de las entidades de `DetallePedido`, en la cual se realiza una agrupacion por codigo de producto, sumando las cantidades que existan, ordenandolos de manera descendente, un maximo de 20 productos imprimidos y retornando un objeto con los datos consultados y un pequeño mensaje.
 
-**🔰 Query 5: Lista las ventas totales de los productos que hayan facturado más de 3000 euros. Se mostrará el nombre, unidades vendidas, total facturado y total facturado con impuestos (21% IVA) ✅**: `http://localhost:5124/api/DetallePedido/ProductosQueFacturaronMasDe3000Euros`
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 5: Lista las ventas totales de los productos que hayan facturado más de 3000 euros. Se mostrará el nombre, unidades vendidas, total facturado y total facturado con impuestos (21% IVA) ✅** 
+
+**ENDPOINT**: `http://localhost:5124/api/DetallePedido/ProductosQueFacturaronMasDe3000Euros`
+
+**CODIGO DE CONSULTA + LINQ**:
 ```sql
-    SELECT `p`.`codigo_producto`, `p`.`cantidad_en_stock`, `p`.`descripcion`, `p`.`dimensiones`, `p`.`gama`, `p`.`nombre`, `p`.`precio_proveedor`, `p`.`precio_venta`, `p`.`proveedor`
-    FROM `producto` AS `p`;
-
     public async Task<object> ProductosQueFacturaronMasDe3000Euros()
     {
         var mensaje = "Productos que facturaron mas de 3000 euros".ToUpper();
@@ -279,15 +264,17 @@
         return resultadoFinal;
     }
 ```
-**Method**: `GET`
+**EXPLICACION**:
+Accedemos al contexto de las entidades de `Productos`, en la cual, se realiza varios Join, en la cual se suma la cantidad de unidades vendidas de dicho producto, los productos se agrupan por codigo de producto, se realiza la respectiva operacion para obtener el facturado sin IVA y con IVA como resultado esperado, y se retorna un objeto.
 
-**🔰 Query 6: Devuelve el nombre del producto del que se han vendido más unidades. (Tenga en cuenta que tendrá que calcular cuál es el número total de unidades que se han vendido de cada producto a partir de los datos de la tabla detalle_pedido) ✅**: `http://localhost:5124/api/DetallePedido/ProductoQueVendioMasUnidades`
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 6: Devuelve el nombre del producto del que se han vendido más unidades. (Tenga en cuenta que tendrá que calcular cuál es el número total de unidades que se han vendido de cada producto a partir de los datos de la tabla detalle_pedido) ✅**
+
+**ENDPOINT**: `http://localhost:5124/api/DetallePedido/ProductoQueVendioMasUnidades`
+
+**CODIGO DE CONSULTA + LINQ**:
 ```sql
-    SELECT `p`.`nombre`
-    FROM `producto` AS `p`
-    WHERE `p`.`codigo_producto` = @__productoMasVendido_0
-    LIMIT 1;
-
     public async Task<object> ProductoQueVendioMasUnidades()
     {
         var mensaje = "Producto que vendio mas unidades".ToUpper();
@@ -311,16 +298,17 @@
         return resultado;
     }
 ```
-**Method**: `GET`
+**EXPLICACION**:
+Accedemos al contexto de las entidades de `DetallePedido` y `Producto`, en la cual, se realiza una agrupacion a partir del codigo del producto, se realiza una suma y se imprime de manera descendente, segun la cantidad que se encuentre registrada, y se retorna un objeto.
 
-**🔰 Query 7: Devuelve el listado de clientes indicando el nombre del cliente y cuántos pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no han realizado ningún pedido ✅**: `http://localhost:5124/api/Cliente/ClientesYCantidadDePedidosRealizados`
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 7: Devuelve el listado de clientes indicando el nombre del cliente y cuántos pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no han realizado ningún pedido ✅**
+
+**ENDPOINT**: `http://localhost:5124/api/Cliente/ClientesYCantidadDePedidosRealizados`
+
+**CODIGO DE CONSULTA + LINQ**:
 ```sql
-    SELECT `c`.`nombre_cliente` AS `NombreCliente`, (
-        SELECT COUNT(*)
-        FROM `pedido` AS `p`
-        WHERE `p`.`codigo_cliente` = `c`.`codigo_cliente`) AS `PedidosRealizados`
-    FROM `cliente` AS `c`;
-
     public async Task<object> ClientesYCantidadDePedidosRealizados()
     {
         var mensaje = "Retornar clientes y cantidad de pedidos realizados".ToUpper();
@@ -341,6 +329,9 @@
         return resultado;
     }
 ```
+**EXPLICACION**:
+Accedemos al contexto de las entidades de `Cliente`, Se realiza una seleccion, un conteo de pedidos por cada cliente que haya realizado uno, y se retorna un objeto.
+
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"><br>
 
 ## Authors and collaborators:
