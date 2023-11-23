@@ -359,7 +359,7 @@ Accedemos al contexto de las entidades de `Cliente`, Se realiza una seleccion, u
 ```
 
 **EXPLICACION**:
-Accedemos al contexto de las entidades de `Empleado` y `Cliente`, se realiza una condicion, en la cual se verifica si el empleado tiene clientes, y se retorna un objeto.
+Accedemos al contexto de las entidades de `Empleado`, `Oficina`,  y `Cliente`, se retorna un objeto de varios datos de distintas entidades.
 
 **METODO**: `GET`
 
