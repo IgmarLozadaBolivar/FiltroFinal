@@ -332,6 +332,47 @@ Accedemos al contexto de las entidades de `DetallePedido` y `Producto`, en la cu
 **EXPLICACION**:
 Accedemos al contexto de las entidades de `Cliente`, Se realiza una seleccion, un conteo de pedidos por cada cliente que haya realizado uno, y se retorna un objeto.
 
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 10: Devuelve un listado de los productos que nunca han aparecido en un pedido ✅**
+
+**ENDPOINT**: `http://localhost:5124/api/Producto/ProductosQueNoHanAparecidoEnUnPedido`
+
+**CODIGO DE CONSULTA + LINQ**:
+```sql
+    public async Task<IEnumerable<object>> ProductosQueNoHanAparecidoEnUnPedido()
+    {
+        var mensaje = "Productos que no han aparecido en un pedido".ToUpper();
+
+        var consulta = from pr in _context.Productos
+                       join dp in _context.DetallePedidos
+                       on pr.CodigoProducto equals dp.CodigoProducto into gj
+                       from subpedido in gj.DefaultIfEmpty()
+                       where subpedido == null
+                       select new
+                       {
+                           CodigoProducto = pr.CodigoProducto,
+                           NombreProducto = pr.Nombre,
+                           GamaProducto = pr.Gama,
+                           Dimensiones = pr.Dimensiones,
+                           Proveedores = pr.Proveedor,
+                           Descripcion = pr.Descripcion,
+                           CantidadEnStock = pr.CantidadEnStock,
+                           PrecioVenta = pr.PrecioVenta,
+                           PrecioProveedor = pr.PrecioProveedor
+                       };
+
+        var resultadoFinal = new List<object>
+    {
+        new { Msg = mensaje, DatosConsultados = await consulta.ToListAsync() }
+    };
+
+        return resultadoFinal;
+    }
+```
+**EXPLICACION**:
+Accedemos al contexto de las entidades de `Producto` y `DetallePedido`, se realiza una condicion, en la cual se verifica si el producto ha estado en un pedido, y se retorna un objeto.
+
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"><br>
 
 ## Authors and collaborators:
