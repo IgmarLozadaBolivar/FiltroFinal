@@ -100,4 +100,14 @@ public class EmpleadoController : BaseApiController
         await unitOfWork.SaveAsync();
         return NoContent();
     }
+
+    [HttpGet("EmpleadosQueNoTieneUnCliente")]
+    [MapToApiVersion("1.0")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<object>>> EmpleadosQueNoTieneUnCliente()
+    {
+        var data = await unitOfWork.Empleados.EmpleadosQueNoTieneUnCliente();
+        return mapper.Map<List<object>>(data);
+    }
 }

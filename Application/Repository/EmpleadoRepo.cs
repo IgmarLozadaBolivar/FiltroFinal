@@ -46,4 +46,31 @@ public class EmpleadoRepo : Generic<Empleado>, IEmpleado
 
         return (totalRegistros, registros);
     }
+
+    public async Task<IEnumerable<object>> EmpleadosQueNoTieneUnCliente()
+    {
+        var mensaje = "Listado de empleados que no tienen un cliente y se retorna el nombre de su jefe".ToUpper();
+
+        var empleadosSinClientesNiOficinas = await (
+            from empleado in _context.Empleados
+            join cliente in _context.Clientes on empleado.CodigoEmpleado equals cliente.CodigoCliente into clientes
+            from cliente in clientes.DefaultIfEmpty()
+            where cliente == null
+            join jefe in _context.Empleados on empleado.CodigoJefe equals jefe.CodigoEmpleado into jefes
+            from jefe in jefes.DefaultIfEmpty()
+            select new
+            {
+                NombreDelEmpleado = empleado.Nombre,
+                ApellidosDelEmpleado = $"{empleado.Apellido1}, {empleado.Apellido2}",
+                NombreDelJefe = (jefe != null) ? jefe.Nombre : "Sin Jefe"
+            })
+            .ToListAsync();
+
+        var resultadoFinal = new List<object>
+        {
+            new { Msg = mensaje, DatosConsultados = empleadosSinClientesNiOficinas }
+        };
+
+        return resultadoFinal;
+    }
 }
