@@ -93,4 +93,20 @@ public class ClienteRepo : Generic<Cliente>, ICliente
 
         return resultado;
     }
+
+    public async Task<object> ClientesNombresRepresentantesOficinas()
+    {
+        var clientesConRepresentanteYOficina = await _context.Clientes
+            .Where(cliente => cliente.CodigoEmpleadoRepVentas != null)
+            .Select(cliente => new
+            {
+                NombreCliente = cliente.NombreCliente,
+                NombreRepresentante = cliente.CodigoEmpleadoRepVentasNavigation.Nombre,
+                ApellidoRepresentante = cliente.CodigoEmpleadoRepVentasNavigation.Apellido1,
+                CiudadOficinaRepresentante = cliente.CodigoEmpleadoRepVentasNavigation.CodigoOficinaNavigation.Ciudad
+            })
+            .ToListAsync();
+
+        return clientesConRepresentanteYOficina;
+    }
 }

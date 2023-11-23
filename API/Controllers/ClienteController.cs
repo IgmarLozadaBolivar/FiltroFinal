@@ -120,4 +120,14 @@ public class ClienteController : BaseApiController
         var data = await unitOfWork.Clientes.ClientesYCantidadDePedidosRealizados();
         return mapper.Map<List<object>>(data);
     }
+
+    [HttpGet("ClientesNombresRepresentantesOficinas")]
+    [MapToApiVersion("1.0")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<object>>> ClientesNombresRepresentantesOficinas()
+    {
+        var data = await unitOfWork.Clientes.ClientesNombresRepresentantesOficinas();
+        return mapper.Map<List<object>>(data);
+    }
 }
