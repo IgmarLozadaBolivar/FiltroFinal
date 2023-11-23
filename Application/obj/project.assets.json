@@ -856,35 +856,37 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\AdminAp-046\\.nuget\\packages\\": {}
+    "C:\\Users\\losad\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AdminAp-046\\Downloads\\FiltroFinal\\Application\\Application.csproj",
+      "projectUniqueName": "C:\\Users\\losad\\FiltroFinal\\Application\\Application.csproj",
       "projectName": "Application",
-      "projectPath": "C:\\Users\\AdminAp-046\\Downloads\\FiltroFinal\\Application\\Application.csproj",
-      "packagesPath": "C:\\Users\\AdminAp-046\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AdminAp-046\\Downloads\\FiltroFinal\\Application\\obj\\",
+      "projectPath": "C:\\Users\\losad\\FiltroFinal\\Application\\Application.csproj",
+      "packagesPath": "C:\\Users\\losad\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\losad\\FiltroFinal\\Application\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\AdminAp-046\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\losad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\AdminAp-046\\Downloads\\FiltroFinal\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\AdminAp-046\\Downloads\\FiltroFinal\\Domain\\Domain.csproj"
+            "C:\\Users\\losad\\FiltroFinal\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\losad\\FiltroFinal\\Domain\\Domain.csproj"
             },
-            "C:\\Users\\AdminAp-046\\Downloads\\FiltroFinal\\Persistence\\Persistence.csproj": {
-              "projectPath": "C:\\Users\\AdminAp-046\\Downloads\\FiltroFinal\\Persistence\\Persistence.csproj"
+            "C:\\Users\\losad\\FiltroFinal\\Persistence\\Persistence.csproj": {
+              "projectPath": "C:\\Users\\losad\\FiltroFinal\\Persistence\\Persistence.csproj"
             }
           }
         }
@@ -914,7 +916,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }
