@@ -370,8 +370,45 @@ Accedemos al contexto de las entidades de `Cliente`, Se realiza una seleccion, u
         return resultadoFinal;
     }
 ```
+
+**METODO**: `GET`
+
+**🔰 ENUNCIADO 9: Listado de empleados que no tienen un cliente y se retorna el nombre de su jefe ✅**
+
+**ENDPOINT**: `http://localhost:5124/api/Producto/ProductosQueNoHanAparecidoEnUnPedido`
+
+**CODIGO DE CONSULTA + LINQ**:
+```sql
+    public async Task<IEnumerable<object>> EmpleadosQueNoTieneUnCliente()
+    {
+        var mensaje = "Listado de empleados que no tienen un cliente y se retorna el nombre de su jefe".ToUpper();
+
+        var empleadosSinClientesNiOficinas = await (
+            from empleado in _context.Empleados
+            join cliente in _context.Clientes on empleado.CodigoEmpleado equals cliente.CodigoCliente into clientes
+            from cliente in clientes.DefaultIfEmpty()
+            where cliente == null
+            join jefe in _context.Empleados on empleado.CodigoJefe equals jefe.CodigoEmpleado into jefes
+            from jefe in jefes.DefaultIfEmpty()
+            select new
+            {
+                NombreDelEmpleado = empleado.Nombre,
+                ApellidosDelEmpleado = $"{empleado.Apellido1}, {empleado.Apellido2}",
+                NombreDelJefe = (jefe != null) ? jefe.Nombre : "Sin Jefe"
+            })
+            .ToListAsync();
+
+        var resultadoFinal = new List<object>
+        {
+            new { Msg = mensaje, DatosConsultados = empleadosSinClientesNiOficinas }
+        };
+
+        return resultadoFinal;
+    }
+```
+
 **EXPLICACION**:
-Accedemos al contexto de las entidades de `Producto` y `DetallePedido`, se realiza una condicion, en la cual se verifica si el producto ha estado en un pedido, y se retorna un objeto.
+Accedemos al contexto de las entidades de `Empleado` y `Cliente`, se realiza una condicion, en la cual se verifica si el empleado tiene clientes, y se retorna un objeto.
 
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"><br>
 
