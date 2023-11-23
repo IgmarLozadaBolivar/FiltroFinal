@@ -46,4 +46,34 @@ public class ProductoRepo : Generic<Producto>, IProducto
 
         return (totalRegistros, registros);
     }
+
+    public async Task<IEnumerable<object>> ProductosQueNoHanAparecidoEnUnPedido()
+    {
+        var mensaje = "Productos que no han aparecido en un pedido".ToUpper();
+
+        var consulta = from pr in _context.Productos
+                       join dp in _context.DetallePedidos
+                       on pr.CodigoProducto equals dp.CodigoProducto into gj
+                       from subpedido in gj.DefaultIfEmpty()
+                       where subpedido == null
+                       select new
+                       {
+                           CodigoProducto = pr.CodigoProducto,
+                           NombreProducto = pr.Nombre,
+                           GamaProducto = pr.Gama,
+                           Dimensiones = pr.Dimensiones,
+                           Proveedores = pr.Proveedor,
+                           Descripcion = pr.Descripcion,
+                           CantidadEnStock = pr.CantidadEnStock,
+                           PrecioVenta = pr.PrecioVenta,
+                           PrecioProveedor = pr.PrecioProveedor
+                       };
+
+        var resultadoFinal = new List<object>
+    {
+        new { Msg = mensaje, DatosConsultados = await consulta.ToListAsync() }
+    };
+
+        return resultadoFinal;
+    }
 }

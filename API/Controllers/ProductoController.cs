@@ -100,4 +100,14 @@ public class ProductoController : BaseApiController
         await unitOfWork.SaveAsync();
         return NoContent();
     }
+
+    [HttpGet("ProductosQueNoHanAparecidoEnUnPedido")]
+    [MapToApiVersion("1.0")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<object>>> ProductosQueNoHanAparecidoEnUnPedido()
+    {
+        var data = await unitOfWork.Productos.ProductosQueNoHanAparecidoEnUnPedido();
+        return mapper.Map<List<object>>(data);
+    }
 }
